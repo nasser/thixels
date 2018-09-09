@@ -12,7 +12,7 @@ Features
 * Clojure live coding API
 * 128x128 pixel framebuffer
 * 16 color indexed palette
-* Integrates [harfbuzz](https://www.freedesktop.org/wiki/Software/HarfBuzz/) and [Fixedsys Excelsior/](http://www.fixedsysexcelsior.com/) for multilingual text rendering.
+* Integrates [harfbuzz](https://www.freedesktop.org/wiki/Software/HarfBuzz/) and [Fixedsys Excelsior](http://www.fixedsysexcelsior.com/) for multilingual text rendering.
 
 Status
 ------
