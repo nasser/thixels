@@ -3,8 +3,8 @@ Thixels
 
 [PICO8](https://www.lexaloffle.com/pico-8.php) inspired live coding visual instrument.
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/ra?ref_src=twsrc%5Etfw">@ra</a> aka doom of the rock knocking it out of the park <a href="https://t.co/JITDMrfoVg">pic.twitter.com/JITDMrfoVg</a></p>&mdash; georgio (@georgionic) <a href="https://twitter.com/georgionic/status/1012499148501811201?ref_src=twsrc%5Etfw">June 29, 2018</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+[![](sunnyvale.png)](https://twitter.com/georgionic/status/1012499148501811201/video/1)
+
 
 Features
 --------
