@@ -5,6 +5,8 @@ Thixels
 
 [![](sunnyvale.png)](https://twitter.com/georgionic/status/1012499148501811201/video/1)
 
+Performed once at [Sunnyvale](http://www.sunnyvalebk.com/) with musician 2050 as part of a [livecode.nyc](http://livecode.nyc) show. Thanks [@georgionic](https://twitter.com/georgionic) for filming this set!
+
 
 Features
 --------
