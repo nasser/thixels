@@ -1,0 +1,7 @@
+/home/nasser/scratch/SharpFont.HarfBuzz/Source/SharpFont.HarfBuzz/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile111.AssemblyAttribute.cs
+/home/nasser/scratch/SharpFont.HarfBuzz/Binaries/SharpFont.HarfBuzz/Debug/.dll.config
+/home/nasser/scratch/SharpFont.HarfBuzz/Binaries/SharpFont.HarfBuzz/Debug/SharpFont.HarfBuzz.dll.config
+/home/nasser/scratch/SharpFont.HarfBuzz/Binaries/SharpFont.HarfBuzz/Debug/SharpFont.HarfBuzz.pdb
+/home/nasser/scratch/SharpFont.HarfBuzz/Binaries/SharpFont.HarfBuzz/Debug/SharpFont.HarfBuzz.dll
+/home/nasser/scratch/SharpFont.HarfBuzz/Source/SharpFont.HarfBuzz/obj/Debug/SharpFont.HarfBuzz.dll
+/home/nasser/scratch/SharpFont.HarfBuzz/Source/SharpFont.HarfBuzz/obj/Debug/SharpFont.HarfBuzz.pdb
