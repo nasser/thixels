@@ -6,6 +6,7 @@ function api(fb, pal) {
     window.clamp = function (a, min = 0, max = 1) { return Math.min(max, Math.max(min, a)) };
     window.remap = function (x1, y1, x2, y2, a) { return window.lerp(x2, y2, window.ilerp(x1, y1, a)) };
     window.abs = Math.abs;
+    window.sqrt = Math.sqrt;
     window.atan2 = Math.atan2;
     window.cos = function (x) { return Math.cos(window.remap(0, 1, 0, 2 * Math.PI, x)) };
     window.sin = function (x) { return Math.sin(window.remap(0, 1, 0, 2 * Math.PI, x)) };
