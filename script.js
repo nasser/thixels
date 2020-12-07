@@ -67,32 +67,34 @@ editor.on('change', e => {
 window.onload = function() {
     editor.setValue(`;; T H I X E L S
 ;; no documentation for now :(
+;; from https://twitter.com/2DArray/status/1335788983838765059
 
-(cyc 128 nil (cls (cyc 64 3 4 0)))
-
-(defn ice-cream [x y r]
-  (forl [i 0 (* 3 r)]
-        (line (+ i (- x (* 2 r))) y x (- y (* 3 r)) 8)
-        (line (- (+ x (* 2 r)) i) y x (- y (* 3 r)) 9))
-  (fcirc (+ x (/ r 1)) y r 4)
-  (fcirc x (+ y r) r 14)
-  (fcirc (- x (/ r 1)) y r 6))
-
-(forl [i 0 32]
-      (let [rad 0.05
-            spd 0.01
-            scl 0.005
-            len 2048
-            aspd 0.5
-            tt (mod (* 64 (+ i (* aspd t))) len)]
-        (ice-cream (+ 64 (* rad tt (cos (* spd tt))))
-                   (+ 64 (* rad tt (sin (* spd tt))))
-                   (* scl tt))))
-
-(cyc 256
-     nil
-     (forl [i 0 128]
-           (rrow i (sin (+ t i)))))
+(cls)
+    
+(let [b t
+      l (+ (/ (cos (/ b 2)) 2) 0.5)]
+  (loop [yy -1
+         w 0.618]
+    (let [y yy
+          r (sqrt (- 1 (* y y)))
+          x (* r (cos w))
+          z (* r (sin w))
+          i (clamp (* x 2) -1 1)
+          j (clamp (* y 2) -1 1)
+          k (clamp (* z 2) -1 1)
+          x (+ x (* l (- i x)))
+          y (+ y (* l (- j y)))
+          z (+ z (* l (- k z)))
+          c (cos b)
+          s (sin b)
+          x (+ (* x s) (* z c))
+          z (- (* x c) (* z s))
+          u (+ 64 (* x 30))
+          v (+ 64 (+ (* y 30) (* z 8)))]
+      (pset u v (+ x (/ z 2) 6))
+      (when (< yy 1)
+        (recur (+ yy 0.002)
+               (+ w 0.618))))))
 `)
     
     
