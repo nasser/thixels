@@ -76,30 +76,29 @@ window.onload = function() {
 (cyc 64 nil (text "T*H*I*X*E*L*S" 10 10 (cyc 8 10 12)))
 
 (let [b t
-        l (+ (/ (cos (/ b 2)) 2) 0.5)]
+      l (+ (/ (cos (/ b 2)) 2) 0.5)]
     (loop [yy -1
-            w 0.618]
+           w 0.618]
     (let [y yy
-            r (sqrt (- 1 (* y y)))
-            x (* r (cos w))
-            z (* r (sin w))
-            i (clamp (* x 2) -1 1)
-            j (clamp (* y 2) -1 1)
-            k (clamp (* z 2) -1 1)
-            x (+ x (* l (- i x)))
-            y (+ y (* l (- j y)))
-            z (+ z (* l (- k z)))
-            c (cos b)
-            s (sin b)
-            x (+ (* x s) (* z c))
-            z (- (* x c) (* z s))
-            u (+ 64 (* x 30))
-            v (+ 64 (+ (* y 30) (* z 8)))]
-        (pset u v (+ x (/ z 2) 6))
-        (when (< yy 1)
-        (recur (+ yy 0.002)
-                (+ w 0.618))))))
-    
+          r (sqrt (- 1 (* y y)))
+          x (* r (cos w))
+          z (* r (sin w))
+          i (clamp (* x 2) -1 1)
+          j (clamp (* y 2) -1 1)
+          k (clamp (* z 2) -1 1)
+          x (+ x (* l (- i x)))
+          y (+ y (* l (- j y)))
+          z (+ z (* l (- k z)))
+          c (cos b)
+          s (sin b)
+          x (+ (* x s) (* z c))
+          z (- (* x c) (* z s))
+          u (+ 64 (* x 30))
+          v (+ 64 (+ (* y 30) (* z 8)))]
+      (pset u v (+ x (/ z 2) 6))
+      (when (< yy 1)
+      (recur (+ yy 0.002)
+              (+ w 0.618))))))
 `)
 }
 
