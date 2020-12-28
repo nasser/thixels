@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/liquibyte.min.css" integrity="sha512-Y7pMcSVpVg6myekc9dUdUfQJH3N+pzobSxFW+HBD19xmYfCHOJYv68kyj4uH0Afrs96o3BWW1y/D/cWd8HC5kg==" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.gstatic.com"> <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <script type="application/wisp">
-        (ns foo (:require [wisp.compiler :as compiler]))
+        (ns thixels (:require [wisp.compiler :as compiler]))
+        (set! window.exports window)
+        (set! window.wisp compiler)
 
         (defmacro forl [[idx from to] & body]
         `(loop [~idx ~from]
@@ -30,8 +32,6 @@
                     clauses
                     (range 1000))
             nil))
-        (set! window.exports window)
-        (set! window.wisp compiler)
         nil
       </script>
     <script src="gif.js"></script>
