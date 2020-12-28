@@ -53,7 +53,17 @@ var editor = CodeMirror.fromTextArea(textarea, {
     cursorBlinkRate: 0,
     lineNumbers: false,
     matchBrackets:true,
-    theme: "liquibyte"
+    theme: "liquibyte",
+    extraKeys: {
+        Tab: function(cm) {
+            if (cm.somethingSelected()) {
+                cm.indentSelection("add");
+              } else {
+                cm.replaceSelection(cm.getOption("indentWithTabs")? "\t":
+                  Array(cm.getOption("indentUnit") + 1).join(" "), "end", "+input");
+              }
+        }
+    }
   });
 
 editor.on('change', e => {
