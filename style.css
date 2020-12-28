@@ -22,10 +22,20 @@ body {
     background-color: black;
 }
 
-.CodeMirror-matchingbracket {
-    background: #ccc !important;
-    color: black !important;
+.CodeMirror-selected {
+    background: rgba(0, 255, 0, 0.5) !important;
 }
+
+.CodeMirror-matchingbracket {
+    background: rgba(0, 255, 0, 0.5) !important;
+}
+
+.CodeMirror .CodeMirror-cursor {
+    width: auto;
+    border: 0;
+    background: transparent;
+    background: white
+  }
 
 /* hack to make highlights work */
 div[role=presentation] div {

@@ -50,6 +50,7 @@ let canvas = document.body.appendChild(document.createElement('canvas'));
 let textarea = document.createElement('textarea')
 document.body.appendChild(textarea)
 var editor = CodeMirror.fromTextArea(textarea, {
+    cursorBlinkRate: 0,
     lineNumbers: false,
     matchBrackets:true,
     theme: "liquibyte"
