@@ -219,4 +219,15 @@ function api(fb, pal) {
             pset(x + ix, y - iy + pixels.height, c)
         } 
     }
+
+    // palettes
+    window.pal = function (source) {
+        if(_pal.source === source) return;
+        if(typeof source == 'string') {
+            _pal = new Palette(source)
+        }
+    }
+
+    window.lospec = paletteName =>
+        `https://lospec.com/palette-list/${paletteName}.json`       
 }

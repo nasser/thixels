@@ -187,6 +187,7 @@ function Palette(init) {
                 this.populateFromData(data)
             });
     }
+    this.source = init
     if (typeof init == 'number')
         this.resize(size)
     else if (typeof init == 'string')
