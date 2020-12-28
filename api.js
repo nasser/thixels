@@ -1,4 +1,4 @@
-function api(fb, pal) {
+function api(fb, _pal) {
 
     //// math
     window.lerp = function (x, y, a) { return x * (1 - a) + y * a };
