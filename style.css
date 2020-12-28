@@ -22,6 +22,11 @@ body {
     background-color: black;
 }
 
+.CodeMirror-matchingbracket {
+    background: #ccc !important;
+    color: black !important;
+}
+
 /* hack to make highlights work */
 div[role=presentation] div {
     z-index: 10 !important;

@@ -51,6 +51,7 @@ let textarea = document.createElement('textarea')
 document.body.appendChild(textarea)
 var editor = CodeMirror.fromTextArea(textarea, {
     lineNumbers: false,
+    matchBrackets:true,
     theme: "liquibyte"
   });
 
