@@ -22,3 +22,8 @@ body {
 .CodeMirror span {
     background-color: black;
 }
+
+@font-face {
+    font-family: 'FSEX301';
+    src: url('FSEX301-L2.ttf')  format('truetype');
+  }

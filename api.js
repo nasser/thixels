@@ -187,5 +187,36 @@ function api(fb, pal) {
                 window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(fb.width)), row));
             }
         }
+    };
+
+    let textCanvas = document.createElement('canvas')
+    let textContext = textCanvas.getContext('2d')
+    textContext.font = "16px FSEX301"
+    textContext.fillStyle = 'black'
+    let _cachedString = null
+    let _cachedPixels = null
+
+    window.text = function (s, x, y, c) {
+        if(_cachedString !== s) {
+            let measure = textContext.measureText(s)
+            let width = measure.width
+            let height = measure.fontBoundingBoxAscent + measure.fontBoundingBoxDescent
+            textCanvas.width = width
+            textCanvas.height = height
+            textContext.font = "16px FSEX301"
+            textContext.fillStyle = 'black'
+            textContext.fillText(s, 0, measure.fontBoundingBoxAscent)
+            _cachedPixels = textContext.getImageData(0, 0, textCanvas.width, textCanvas.height)
+        }
+        _blit(_cachedPixels, x, y, c)
+    }
+
+    window._blit = function (pixels, x, y, c) {
+        for (let i = 0; i < pixels.data.length; i+=4) {
+            if(pixels.data[i+3] == 0) continue;
+            const ix = (i/4) % pixels.width
+            const iy = Math.floor((i/4) / pixels.width)
+            pset(x + ix, y - iy + pixels.height, c)
+        } 
     }
 }
