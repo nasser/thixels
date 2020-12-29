@@ -5,6 +5,15 @@ function api(fb, _pal) {
     window.ilerp = function (x, y, a) { return (a - x) / (y - x) };
     window.clamp = function (a, min = 0, max = 1) { return Math.min(max, Math.max(min, a)) };
     window.remap = function (x1, y1, x2, y2, a) { return window.lerp(x2, y2, window.ilerp(x1, y1, a)) };
+    window.sgn = Math.sign;
+    window.srnd = function(v) { Math.seedrandom(v) }
+    window.rnd = function(min=0, max=1) { 
+        const _min = Math.min(min, max)
+        const _max = Math.max(min, max)
+        return _min + Math.random() * (_max - _min)
+    }
+    window.ceil = Math.ceil;
+    window.flr = Math.floor;
     window.abs = Math.abs;
     window.sqrt = Math.sqrt;
     window.atan2 = Math.atan2;
