@@ -19,7 +19,7 @@ function api(fb, _pal) {
         let y = Math.trunc(yy);
         if (x >= fb.width || y >= fb.height || x < 0 || y < 0)
             return;
-        fb.data[(x % fb.width) + y * fb.width] = c;
+        fb.data[(x % fb.width) + y * fb.width] = c % _pal.size;
     };
     window.pget = function (xx, yy) {
         let x = Math.trunc(xx);
