@@ -237,3 +237,12 @@ function createProgram(vertex, fragment) {
 }
 
 render();
+
+// keyboard shortcuts
+document.onkeydown = function (e) {
+    if(e.code == 'KeyH' && e.ctrlKey) {
+        e.preventDefault()
+        document.querySelector('.CodeMirror').classList.toggle('hidden')
+    }
+    
+}

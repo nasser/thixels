@@ -18,6 +18,16 @@ body {
     outline: none;
 }
 
+.CodeMirror.hidden {
+    transition: 0.25s;
+    opacity: 0;
+}
+
+.CodeMirror {
+    transition: 0.25s;
+    opacity: 1;
+}
+
 .CodeMirror span {
     background-color: black;
 }
