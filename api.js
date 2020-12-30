@@ -2,6 +2,7 @@ function api(_fb, _pal) {
     function updateGlobals() {
         window.$w = _fb.width
         window.$h = _fb.height
+        window.$c = _pal.size
         window.$ox = _fb.width/2
         window.$oy = _fb.height/2
     }
@@ -234,6 +235,7 @@ function api(_fb, _pal) {
         if(_pal.source === source) return;
         if(typeof source == 'string') {
             _pal = new Palette(source)
+            updateGlobals()
         }
     }
 
