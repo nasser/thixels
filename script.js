@@ -66,8 +66,47 @@ var editor = CodeMirror.fromTextArea(textarea, {
     }
   });
 
+var sketchName = "#scratch#"
+
+const initialSketch =`;; T H I X E L S
+;; do documentation yet :(
+
+(cls)
+
+(cyc 64 nil (text "T*H*I*X*E*L*S" 10 10 (cyc 8 10 12)))
+
+(let [b t
+        l (+ (/ (cos (/ b 2)) 2) 0.5)]
+    (loop [yy -1
+            w 0.618]
+    (let [y yy
+            r (sqrt (- 1 (* y y)))
+            x (* r (cos w))
+            z (* r (sin w))
+            i (clamp (* x 2) -1 1)
+            j (clamp (* y 2) -1 1)
+            k (clamp (* z 2) -1 1)
+            x (+ x (* l (- i x)))
+            y (+ y (* l (- j y)))
+            z (+ z (* l (- k z)))
+            c (cos b)
+            s (sin b)
+            x (+ (* x s) (* z c))
+            z (- (* x c) (* z s))
+            u (+ 64 (* x 30))
+            v (+ 64 (+ (* y 30) (* z 8)))]
+        (pset u v (+ x (/ z 2) 6))
+        (when (< yy 1)
+        (recur (+ yy 0.002)
+                (+ w 0.618))))))
+`
+
+const sketchKey = n => `thixels:sketch:${n}`
+
 editor.on('change', e => {
-    let compiled = wisp.compile(editor.getDoc().getValue())
+    let source = editor.getDoc().getValue()
+    localStorage.setItem(sketchKey(sketchName), source)
+    let compiled = wisp.compile(source)
     if(compiled.code) {
         console.log(compiled.code);
         draw = new Function(['t', 'f'], compiled.code)
@@ -77,39 +116,8 @@ editor.on('change', e => {
 })
 
 window.onload = function() {
-    editor.setValue(`;; T H I X E L S
-;; no documentation for now :(
-;; from https://twitter.com/2DArray/status/1335788983838765059
-
-(cls)
-
-(cyc 64 nil (text "T*H*I*X*E*L*S" 10 10 (cyc 8 10 12)))
-
-(let [b t
-      l (+ (/ (cos (/ b 2)) 2) 0.5)]
-    (loop [yy -1
-           w 0.618]
-    (let [y yy
-          r (sqrt (- 1 (* y y)))
-          x (* r (cos w))
-          z (* r (sin w))
-          i (clamp (* x 2) -1 1)
-          j (clamp (* y 2) -1 1)
-          k (clamp (* z 2) -1 1)
-          x (+ x (* l (- i x)))
-          y (+ y (* l (- j y)))
-          z (+ z (* l (- k z)))
-          c (cos b)
-          s (sin b)
-          x (+ (* x s) (* z c))
-          z (- (* x c) (* z s))
-          u (+ 64 (* x 30))
-          v (+ 64 (+ (* y 30) (* z 8)))]
-      (pset u v (+ x (/ z 2) 6))
-      (when (< yy 1)
-      (recur (+ yy 0.002)
-              (+ w 0.618))))))
-`)
+    let source = localStorage.getItem(sketchKey(sketchName)) || initialSketch
+    editor.setValue(source)
 }
 
 // gl setup
@@ -144,18 +152,22 @@ function render(now = 0) {
 }
 
 function Framebuffer(width, height) {
-    this.width = width
-    this.height = height
-    this.data = new Uint8Array(width * height)
     this.unit = 0
     this.update = function () {
         gl.activeTexture(gl.TEXTURE0 + this.unit);
         gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this.width, this.height, gl.RED_INTEGER, gl.UNSIGNED_BYTE, this.data)
     }
 
-    makeTexture(width, height, this.unit, gl.R8UI, gl.RED_INTEGER, gl.UNSIGNED_BYTE, this.data)
-    gl.uniform1i(gl.getUniformLocation(program, "framebuffer"), this.unit)
+    this.resize = function(width, height) {
+        this.width = width
+        this.height = height
+        this.data = new Uint8Array(width * height)    
+        makeTexture(width, height, this.unit, gl.R8UI, gl.RED_INTEGER, gl.UNSIGNED_BYTE, this.data)
+        gl.uniform1i(gl.getUniformLocation(program, "framebuffer"), this.unit)    
+        this.update()
+    }
 
+    this.resize(width, height)
 }
 
 function Palette(init) {
@@ -187,7 +199,7 @@ function Palette(init) {
         this.update()
     }
     this.populateFromUrl = function (url) {
-        const key = `thixels:palette${url}`
+        const key = `thixels:palette:${url}`
         if (localStorage.getItem(key))
             return this.populateFromData(JSON.parse(localStorage.getItem(key)))
         fetch(`https://cors-anywhere.herokuapp.com/${url}`)
@@ -237,12 +249,3 @@ function createProgram(vertex, fragment) {
 }
 
 render();
-
-// keyboard shortcuts
-document.onkeydown = function (e) {
-    if(e.code == 'KeyH' && e.ctrlKey) {
-        e.preventDefault()
-        document.querySelector('.CodeMirror').classList.toggle('hidden')
-    }
-    
-}

@@ -1,4 +1,11 @@
-function api(fb, _pal) {
+function api(_fb, _pal) {
+    function updateGlobals() {
+        window.$w = _fb.width
+        window.$h = _fb.height
+        window.$ox = _fb.width/2
+        window.$oy = _fb.height/2
+    }
+    updateGlobals()
 
     //// math
     window.lerp = function (x, y, a) { return x * (1 - a) + y * a };
@@ -20,23 +27,31 @@ function api(fb, _pal) {
     window.cos = function (x) { return Math.cos(window.remap(0, 1, 0, 2 * Math.PI, x)) };
     window.sin = function (x) { return Math.sin(window.remap(0, 1, 0, 2 * Math.PI, x)) };
     window.cls = function (c) {
-        fb.data.fill(c)
+        _fb.data.fill(c)
     };
 
     window.pset = function (xx, yy, c) {
         let x = Math.trunc(xx);
         let y = Math.trunc(yy);
-        if (x >= fb.width || y >= fb.height || x < 0 || y < 0)
+        if (x >= _fb.width || y >= _fb.height || x < 0 || y < 0)
             return;
-        fb.data[(x % fb.width) + y * fb.width] = c % _pal.size;
+        _fb.data[(x % _fb.width) + y * _fb.width] = c % _pal.size;
     };
     window.pget = function (xx, yy) {
         let x = Math.trunc(xx);
         let y = Math.trunc(yy);
-        if (x >= fb.width || y >= fb.height || x < 0 || y < 0)
+        if (x >= _fb.width || y >= _fb.height || x < 0 || y < 0)
             return 0;
-        return fb.data[(x % fb.width) + y * fb.width];
+        return _fb.data[(x % _fb.width) + y * _fb.width];
     };
+
+    window.horiz = function(yy, xx0, xx1, c) {
+        const w = _fb.width
+        const x0 = xx0 < 0 ? 0 : Math.trunc(xx0)
+        const x1 = xx1 > w ? w : Math.trunc(xx1)
+        const y = Math.trunc(yy)
+        _fb.data.fill(c % _pal.size, x0 + y * w, x1 + y * w)
+    }
 
     // https://answers.unity.com/questions/380035/c-modulus-is-wrong-1.html
     window.mod = function (a, n) {
@@ -67,10 +82,10 @@ function api(fb, _pal) {
         let err = Math.trunc(2 - 2 * radius);
         let i = 0;
         do {
-            window.line(x0 - x, y0 + y, x0, y0 + y, c);
-            window.line(x0 - y, y0 - x, x0, y0 - x, c);
-            window.line(x0 + x, y0 - y, x0, y0 - y, c);
-            window.line(x0 + y, y0 + x, x0, y0 + x, c);
+            window.horiz(y0 + y, x0, x0 - x, c);
+            window.horiz(y0 - x, x0 - y, x0, c);
+            window.horiz(y0 - y, x0 + x, x0, c);
+            window.horiz(y0 + x, x0, x0 + y, c);
             i++;
             radius = err;
             if (radius <= y) err += ++y * 2 + 1;
@@ -82,35 +97,24 @@ function api(fb, _pal) {
     window.line = function (x0, y0, x1, y1, c) {
         if (y0 == y1) {
             if (x0 < x1) {
-                if (x0 < 0) x0 = 0;
-                if (x1 > fb.width) x1 = fb.width;
-                while (x0 < x1) {
-                    window.pset(x0, y0, c);
-                    x0 += 1;
-                }
+                horiz(y0, x0, x1, c)
             } else {
-                if (x1 < 0) x1 = 0;
-                if (x0 > fb.width) x0 = fb.width;
-                while (x1 < x0) {
-                    window.pset(x1, y0, c);
-                    x1 += 1;
-                }
-
-                return;
+                horiz(y0, x1, x0, c)
             }
+            return;
         }
 
         if (x0 == x1) {
             if (y0 < y1) {
                 if (y0 < 0) y0 = 0;
-                if (y1 > fb.width) y1 = fb.width;
+                if (y1 > _fb.width) y1 = _fb.width;
                 while (y0 < y1) {
                     window.pset(x0, y0, c);
                     y0 += 1;
                 }
             } else {
                 if (y1 < 0) y1 = 0;
-                if (y0 > fb.width) y0 = fb.width;
+                if (y0 > _fb.width) y0 = _fb.width;
                 while (y1 < y0) {
                     window.pset(x0, y1, c);
                     y1 += 1;
@@ -166,10 +170,8 @@ function api(fb, _pal) {
             window.pset(x2, y, c);
         }
 
-        for (let x = x1; x <= x2; x += 1) {
-            window.pset(x, y1, c);
-            window.pset(x, y2, c);
-        }
+        horiz(y1, x1, x2, c)
+        horiz(y2, x1, x2, c)
     };
 
     window.frect = function (xx1, yy1, xx2, yy2, c) {
@@ -179,21 +181,19 @@ function api(fb, _pal) {
         let y2 = Math.max(yy1, yy2);
 
         for (let y = y1; y <= y2; y += 1) {
-            for (let x = x1; x <= x2; x += 1) {
-                window.pset(x, y, c);
-            }
+            horiz(y, x1, x2, c);
         }
     };
 
     window.rrow = function (row, distance) {
         if (distance > 0) {
-            for (let i = 0; i < fb.width; i++) {
-                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(fb.width)), row));
+            for (let i = 0; i < _fb.width; i++) {
+                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
             }
         }
         else {
-            for (let i = Math.trunc(fb.width); i >= 0; i--) {
-                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(fb.width)), row));
+            for (let i = Math.trunc(_fb.width); i >= 0; i--) {
+                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
             }
         }
     };
@@ -239,4 +239,11 @@ function api(fb, _pal) {
 
     window.lospec = paletteName =>
         `https://lospec.com/palette-list/${paletteName}.json`       
+
+    // framebuffers
+    window.size = function(s) {
+        if(_fb.width == s) return;
+        _fb.resize(s, s);
+        updateGlobals()
+    }
 }
