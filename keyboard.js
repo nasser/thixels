@@ -56,7 +56,24 @@ function doPareditEdit(f) {
     }
 }
 
+function insertAndAutoClose(pair) {
+    const doc = editor.getDoc()
+    doc.replaceSelection(pair)
+    const {line,ch} = doc.getCursor()
+    doc.setCursor({line,ch:ch-1})
+}
+
 editor.setOption('extraKeys', {
+    // better autoclose
+    'Shift-9': function() {
+        insertAndAutoClose("()")
+    },
+    '[': function() {
+        insertAndAutoClose("[]")
+    },
+    'Shift-[': function() {
+        insertAndAutoClose("{}")
+    },
     // navigate upward sexp
     'Alt-Up': function() {
         doPareditNavigate(paredit.navigator.backwardUpSexp)
