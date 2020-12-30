@@ -137,7 +137,10 @@ editor.setOption('extraKeys', {
     },
     // format document
     'Shift-Alt-F': function() {
+        const doc = editor.getDoc()
+        const cursor = doc.getCursor()
         doPareditEdit((ast, source) => paredit.editor.indentRange(ast, source, 0, source.length))
+        doc.setCursor(cursor)
     },
 
     "Shift-Ctrl-L": function () {
