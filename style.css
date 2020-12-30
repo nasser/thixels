@@ -18,6 +18,10 @@ body {
     outline: none;
 }
 
+pre.CodeMirror-line {
+    padding-left: 0 !important;
+}
+
 .CodeMirror.hidden {
     transition: 0.25s;
     opacity: 0;
@@ -39,13 +43,6 @@ body {
 .CodeMirror-matchingbracket {
     background: rgba(0, 255, 0, 0.5) !important;
 }
-
-.CodeMirror .CodeMirror-cursor {
-    width: auto;
-    border: 0;
-    background: transparent;
-    background: white
-  }
 
 /* hack to make highlights work */
 div[role=presentation] div {
