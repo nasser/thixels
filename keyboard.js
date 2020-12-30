@@ -19,7 +19,110 @@ function selectionOrWord() {
     }
 }
 
+paredit.specialForms.push('forl')
+
+function applyPareditChanges(source, changes) {
+    for (const [verb, index, x] of changes) {
+        if(verb === 'remove') {
+            source = source.slice(0, index) + source.slice(index + x)
+        } else if(verb === 'insert') {
+            source = source.slice(0, index) + x + source.slice(index)
+        }
+    }
+    return source
+}
+
+function doPareditNavigate(f) {
+    const doc = editor.getDoc()
+    const ast = paredit.parse(doc.getValue())
+    const cursor = doc.getCursor()
+    const idx = doc.indexFromPos(cursor)
+    const newIndex = f(ast, idx)
+    doc.setCursor(doc.posFromIndex(newIndex))
+}
+
+function doPareditEdit(f) {
+    const doc = editor.getDoc()
+    const source = doc.getValue()
+    const ast = paredit.parse(source)
+    const cursor = doc.getCursor()
+    const idx = doc.indexFromPos(cursor)
+    const edit = f(ast, source, idx)
+    if(edit) {
+        const { newIndex, changes } = edit
+        const newSource = applyPareditChanges(source, changes)
+        doc.setValue(newSource)
+        doc.setCursor(doc.posFromIndex(newIndex))
+    }
+}
+
 editor.setOption('extraKeys', {
+    // navigate upward sexp
+    'Alt-Up': function() {
+        doPareditNavigate(paredit.navigator.backwardUpSexp)
+    },
+    // navigate downward sexp
+    'Alt-Down': function() {
+        doPareditNavigate(paredit.navigator.forwardDownSexp)
+    },
+    // navigate forward sexp
+    'Alt-Right': function() {
+        doPareditNavigate(paredit.navigator.forwardSexp)
+    },
+    // navigate backward sexp
+    'Alt-Left': function() {
+        doPareditNavigate(paredit.navigator.backwardSexp)
+    },
+    // kill forwards
+    'Alt-Delete': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.killSexp(ast, source, idx, {}))
+    },
+    // kill backwards
+    'Alt-Backspace': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.killSexp(ast, source, idx, {backward:true}))
+    },
+    // wrap { }
+    'Shift-Alt-[': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.wrapAround(ast, source, idx, "{", "}", {}))
+    },
+    'Alt-[': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.wrapAround(ast, source, idx, "[", "]", {}))
+    },
+    // wrap ( )
+    'Alt-9': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.wrapAround(ast, source, idx, "(", ")", {}))
+    },
+    'Shift-Alt-9': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.wrapAround(ast, source, idx, "(", ")", {}))
+    },
+    // slurp sexp
+    'Shift-Alt-Right': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.slurpSexp(ast, source, idx, {}))
+    },
+    'Shift-Alt-Left': function() {
+        doPareditEdit((ast, source, idx) =>
+            paredit.editor.slurpSexp(ast, source, idx, {backward:true}))
+    },
+    // split sexp
+    'Shift-Alt-Down': function() {
+        doPareditEdit(paredit.editor.splitSexp)
+    },
+    // splice sexp
+    'Shift-Alt-Up': function() {
+        doPareditEdit(paredit.editor.spliceSexp)
+    },
+    // format document
+    'Shift-Alt-F': function() {
+        doPareditEdit((ast, source) => paredit.editor.indentRange(ast, source, 0, source.length))
+    },
+
     "Shift-Ctrl-L": function () {
         let query = selectionOrWord()
         let cursor = editor.getSearchCursor(query)

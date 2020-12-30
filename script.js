@@ -51,6 +51,8 @@ let textarea = document.createElement('textarea')
 document.body.appendChild(textarea)
 var editor = CodeMirror.fromTextArea(textarea, {
     autofocus: true,
+    scrollbarStyle: null,
+    autoCloseBrackets: true,
     cursorBlinkRate: 0,
     lineNumbers: false,
     matchBrackets:true,
