@@ -109,10 +109,10 @@ const sketchKey = n => `thixels:sketch:${n}`
 editor.on('change', e => {
     let source = editor.getDoc().getValue()
     localStorage.setItem(sketchKey(sketchName), source)
-    let compiled = wisp.compile(source)
+    let compiled = wisp.compile(source, { 'source-uri':'', 'no-map':true })
     if(compiled.code) {
         console.log(compiled.code);
-        draw = new Function(['t', 'f'], compiled.code)
+        eval(compiled.code)
     } else {
         console.error(compiled)
     }
