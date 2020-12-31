@@ -44,18 +44,24 @@ function doPareditNavigate(f) {
 function doPareditEdit(f) {
     const doc = editor.getDoc()
     const scrollPosition = editor.getScrollInfo()
-    const source = doc.getValue()
-    const ast = paredit.parse(source)
-    const cursor = doc.getCursor()
-    const idx = doc.indexFromPos(cursor)
-    const edit = f(ast, source, idx)
-    if(edit) {
-        const { newIndex, changes } = edit
-        const newSource = applyPareditChanges(source, changes)
-        doc.setValue(newSource)
-        doc.setCursor(doc.posFromIndex(newIndex))
-        editor.scrollTo(scrollPosition.left, scrollPosition.top)
+    const newCursors = []
+    // const cursor = doc.getCursor()
+    for (const sel of doc.listSelections()) {
+        const cursor = sel.anchor
+        const source = doc.getValue()
+        const ast = paredit.parse(source)
+        const idx = doc.indexFromPos(cursor)
+        const edit = f(ast, source, idx)
+        if(edit) {
+            const { newIndex, changes } = edit
+            const newSource = applyPareditChanges(source, changes)
+            const newPos = doc.posFromIndex(newIndex)
+            doc.setValue(newSource)
+            newCursors.push({anchor:newPos, head:newPos})
+        }
     }
+    doc.setSelections(newCursors)
+    editor.scrollTo(scrollPosition.left, scrollPosition.top)
 }
 
 function insertAndAutoClose(pair) {
