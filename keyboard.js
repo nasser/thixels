@@ -202,7 +202,9 @@ editor.setOption('extraKeys', {
         let head = { line: sel.head.line + 1, ch: sel.head.ch }
         sels.push({ anchor, head })
         editor.getDoc().setSelections(sels, sels.length - 1)
-    }
+    },
+    "Tab": (cm) => cm.execCommand("indentMore"),
+    "Shift-Tab": (cm) => cm.execCommand("indentLess")
 })
 
 document.onkeydown = function (e) {
