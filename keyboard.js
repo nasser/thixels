@@ -60,9 +60,15 @@ function doPareditEdit(f) {
 
 function insertAndAutoClose(pair) {
     const doc = editor.getDoc()
-    doc.replaceSelection(pair)
-    const {line,ch} = doc.getCursor()
-    doc.setCursor({line,ch:ch-1})
+    if(doc.somethingSelected()) {
+        doc.replaceSelections(doc.getSelections().map(sel => `${pair[0]}${sel}${pair[1]}`))
+    } else {
+        doc.replaceSelection(pair)
+    }
+    for (const {anchor, head} of doc.listSelections()) {
+        anchor.ch -= 1
+        head.ch -= 1
+    }
 }
 
 editor.setOption('extraKeys', {
