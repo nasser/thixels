@@ -160,7 +160,8 @@ editor.setOption('extraKeys', {
             const selTexts = doc.getSelections() 
             const sel = sels[sels.length - 1]
             const selText = selTexts[selTexts.length - 1]
-            let cursor = editor.getSearchCursor(selText, sel.head)
+            const ch = Math.max(sel.head.ch, sel.anchor.ch)
+            let cursor = editor.getSearchCursor(selText, { ...sel.head, ch })
             if(cursor.findNext()) {
                 sels.push({ anchor: cursor.from(), head: cursor.to() })
             }
