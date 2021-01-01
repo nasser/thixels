@@ -71,38 +71,67 @@ var editor = CodeMirror.fromTextArea(textarea, {
 var sketchName = "#scratch#"
 
 const initialSketch =`;; T H I X E L S
-    ;; do documentation yet :(
-    
-    (defn draw [t]
-      (cls)
-      
-      (cyc 64 nil (text "T*H*I*X*E*L*S" 10 10 (cyc 8 10 12)))
-      
-      (let [b t
-            l (+ (/ (cos (/ b 2)) 2) 0.5)]
-        (loop [yy -1
-               w 0.618]
-          (let [y yy
-                r (sqrt (- 1 (* y y)))
-                x (* r (cos w))
-                z (* r (sin w))
-                i (clamp (* x 2) -1 1)
-                j (clamp (* y 2) -1 1)
-                k (clamp (* z 2) -1 1)
-                x (+ x (* l (- i x)))
-                y (+ y (* l (- j y)))
-                z (+ z (* l (- k z)))
-                c (cos b)
-                s (sin b)
-                x (+ (* x s) (* z c))
-                z (- (* x c) (* z s))
-                u (+ 64 (* x 30))
-                v (+ 64 (+ (* y 30) (* z 8)))]
-            (pset u v (+ x (/ z 2) 6))
-            (when (< yy 1)
-              (recur (+ yy 0.002)
-                (+ w 0.618)))))))
-    
+;; from ramsey nasser aka DOOM OF THE ROCK
+;; (https://nas.sr/, https://merveilles.town/@nasser)
+;; new year's resolution: documentation
+;; ctrl+enter after change to update
+
+(pal (lospec :blk-neo))
+
+(defn draw [t]
+  (cls)
+  (let [k 20]
+    (forl [i 0 k]
+      (forl [j 0 k]
+        (let [i (+ (* 16 t) i)
+              cc (mod (+ i j) (/ $c 1))
+              [x y z] (polar 10 (/ i k) (/ j k))
+              [x y z] (rotate3 x y z (* 0.1 t) (* 0.5 t) 0)]
+          (plot (+ (* 3 (sin t)) x)
+                (+ 1 y)
+                (+ 5 (* 1 (sin t)) (* 0.5 z)) cc)))))
+  (forl [i 0 10]
+    (let [x (* 10 (sin (+ (* i 0.01) t)))
+          c (+ (* 200 t) i)]
+      (text "HAPPY NEW YEAR" x (+ 50 i) c)
+      (text "  ** 2021 **  " x (+ 50 (- i 12)) c))))
+
+
+
+(defn td [x y z]
+  (let [d 10
+        dz (/ d z)
+        u (+ 64 (* x dz))
+        v (+ 64 (* y dz))]
+    [u v]))
+
+(defn plot [x y z c]
+  (let [[u v] (td x y z)]
+    (pset u v c)))
+
+(defn rotate3 [x y z m n p]
+  (let 
+    [a (* (cos n) (cos p))
+     b (* (* -1 (cos n)) (sin p))
+     c (sin n)
+     d (+ (* (sin m) (sin n) (cos p)) (* (cos m) (sin p)))
+     e (- (* (cos m) (cos p)) (* (sin m) (sin n) (sin p)))
+     f (* (sin m) (* -1 (cos n)))
+     g (- (* (sin m) (sin p)) (* (cos m) (sin n) (cos p)))
+     h (+ (* (cos m) (sin n) (sin p)) (* (sin m) (cos p)))
+     i (* (cos m) (cos n))
+     x1 (+ (* a x) (* b y) (* c z))
+     y1 (+ (* d x) (* e y) (* f z))
+     z1 (+ (* g x) (* h y) (* i z))]
+    [x1 y1 z1]))
+
+(defn polar [r t a]
+  (let [t (mod t 0.5)
+        a (mod a 1)
+        x (* r (sin t) (cos a))
+        y (* r (sin t) (sin a))
+        z (* r (cos t))]
+    [x y z]))
 `
 
 const sketchKey = n => `thixels:sketch:${n}`
