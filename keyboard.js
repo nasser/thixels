@@ -225,27 +225,28 @@ document.onkeydown = function (e) {
                 else
                 editor.display.input.focus()
                 break;
-            case 'KeyS':
-                e.preventDefault()
-                sketchName = prompt(`current sketch: ${sketchName}\n\nnew sketch name:`)
-                if (!sketchName) return
-                localStorage.setItem(sketchKey(sketchName), editor.getDoc().getValue())
-                break;
-            case 'KeyO':
-                e.preventDefault()
-                let sketches = Object.keys(localStorage)
-                    .filter(n => n.startsWith("thixels:sketch:") && !n.endsWith(sketchName))
-                    .map(n => n.replace("thixels:sketch:", ""))
-                    .join(", ")
-                sketchName = prompt(`current sketch: ${sketchName}\n\noptions:\n${sketches}\n\nsketch name`)
-                if (!sketchName) return
-                let source = localStorage.getItem(sketchKey(sketchName))
-                if (source) {
-                    editor.setValue(source)
-                } else {
-                    alert(`sketch '${sketchName}' not found`)
-                }
-                break;
+            // case 'KeyS':
+            //     e.preventDefault()
+            //     sketchName = prompt(`current sketch: ${sketchName}\n\nnew sketch name:`)
+            //     if (!sketchName) break;
+            //     localStorage.setItem(sketchKey(sketchName), editor.getDoc().getValue())
+            //     break;
+            // case 'KeyO':
+            //     e.preventDefault()
+            //     let sketches = Object.keys(localStorage)
+            //         .filter(n => n.startsWith("thixels:sketch:") && !n.endsWith(sketchName))
+            //         .map(n => n.replace("thixels:sketch:", ""))
+            //         .join(", ")
+            //     sketchName = prompt(`current sketch: ${sketchName}\n\noptions:\n${sketches}\n\nsketch name`)
+            //     if (!sketchName) break;
+            //     let source = localStorage.getItem(sketchKey(sketchName))
+            //     if (source) {
+            //         editor.setValue(source)
+            //     } else {
+            //         alert(`sketch '${sketchName}' not found`)
+            //     }
+            //     break;
         }
+        // editor.focus()
     }
 }
