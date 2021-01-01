@@ -147,16 +147,19 @@ function evalEditor() {
     }
 }
 
-editor.on('change', e => {
-    // disabled for nye
-    // evalEditor()
-    let source = editor.getDoc().getValue()
-    localStorage.setItem(sketchKey(sketchName), source)
-})
+// editor.on('change', e => {
+//     // disabled for nye
+//     // evalEditor()
+//     // let source = editor.getDoc().getValue()
+//     // localStorage.setItem(sketchKey(sketchName), source)
+// })
 
 window.onload = function() {
-    let source = localStorage.getItem(sketchKey(sketchName)) || initialSketch
+    // disabling localstorage stuff for now
+    // let source = localStorage.getItem(sketchKey(sketchName)) || initialSketch
+    let source = initialSketch
     editor.setValue(source)
+    evalEditor()
 }
 
 // gl setup
