@@ -210,7 +210,8 @@ editor.setOption('extraKeys', {
         editor.getDoc().setSelections(sels, sels.length - 1)
     },
     "Tab": (cm) => cm.execCommand("indentMore"),
-    "Shift-Tab": (cm) => cm.execCommand("indentLess")
+    "Shift-Tab": (cm) => cm.execCommand("indentLess"),
+    'Ctrl-Enter': evalEditor
 })
 
 document.onkeydown = function (e) {

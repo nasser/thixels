@@ -107,9 +107,8 @@ const initialSketch =`;; T H I X E L S
 
 const sketchKey = n => `thixels:sketch:${n}`
 
-editor.on('change', e => {
+function evalEditor() {
     let source = editor.getDoc().getValue()
-    localStorage.setItem(sketchKey(sketchName), source)
     let compiled = wisp.compile(source, { 'source-uri':'', 'no-map':true })
     if(compiled.code) {
         console.log(compiled.code);
@@ -117,6 +116,13 @@ editor.on('change', e => {
     } else {
         console.error(compiled)
     }
+}
+
+editor.on('change', e => {
+    // disabled for nye
+    // evalEditor()
+    let source = editor.getDoc().getValue()
+    localStorage.setItem(sketchKey(sketchName), source)
 })
 
 window.onload = function() {
