@@ -189,12 +189,25 @@ function api(_fb, _pal) {
     window.rrow = function (row, distance) {
         if (distance > 0) {
             for (let i = 0; i < _fb.width; i++) {
-                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
+                pset(i, row, pget(mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
             }
         }
         else {
             for (let i = Math.trunc(_fb.width); i >= 0; i--) {
-                window.pset(i, row, window.pget(window.mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
+                pset(i, row, pget(mod(Math.trunc(i + distance), Math.trunc(_fb.width)), row));
+            }
+        }
+    };
+
+    window.rcol = function (col, distance) {
+        if (distance > 0) {
+            for (let i = 0; i < _fb.height; i++) {
+                pset(col, i, pget(col, mod(Math.trunc(i + distance), Math.trunc(_fb.height))));
+            }
+        }
+        else {
+            for (let i = Math.trunc(_fb.height); i >= 0; i--) {
+                pset(col, i, pget(col, mod(Math.trunc(i + distance), Math.trunc(_fb.height))));
             }
         }
     };
